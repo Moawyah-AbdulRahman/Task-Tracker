@@ -74,7 +74,8 @@ namespace TaskTracker.Db.Migrations
                 name: "Tasks",
                 columns: table => new
                 {
-                    TaskId = table.Column<long>(type: "bigint", nullable: false),
+                    TaskId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     ProjectId = table.Column<long>(type: "bigint", nullable: false),
                     UserId = table.Column<long>(type: "bigint", nullable: false),
                     State = table.Column<int>(type: "int", nullable: false)
@@ -100,7 +101,8 @@ namespace TaskTracker.Db.Migrations
                 name: "Increments",
                 columns: table => new
                 {
-                    IncrementId = table.Column<long>(type: "bigint", nullable: false),
+                    IncrementId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     TaskId = table.Column<long>(type: "bigint", nullable: false),
                     ProjectId = table.Column<long>(type: "bigint", nullable: false)
                 },
