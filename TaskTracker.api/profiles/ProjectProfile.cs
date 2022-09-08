@@ -16,5 +16,11 @@ public class ProjectProfile : Profile
                 dest=>dest.Users,
                 opt=>opt.MapFrom(src=>src.Users!.Select(u=>u.UserID))
             );
+        
+        CreateMap<CreateProjectDto, Project>()
+            .ForMember(
+                dest=>dest.ProjectName,
+                opt=>opt.MapFrom(src=>src.Name)
+            );
     }
 }

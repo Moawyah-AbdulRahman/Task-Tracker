@@ -11,6 +11,12 @@ public class ProjectDbRepository : IProjectRepository
         this.dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
     }
 
+    public void CreateProject(Project project)
+    {
+        dbContext.Add(project);
+        dbContext.SaveChanges();
+    }
+
     public IEnumerable<Project> GetProjects(long? userId, ProjectState? state,
         DateTime? startDate)
     {

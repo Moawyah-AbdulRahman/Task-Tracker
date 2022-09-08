@@ -16,20 +16,21 @@ public class ProjectControllerShould
     {
 
         mockProjectRepo = new Mock<IProjectRepository>();
-        
-        var config = new MapperConfiguration(cfg => {
-                cfg.CreateMap<Project, ProjectDto>();
-            });
-        
+
+        var config = new MapperConfiguration(cfg =>
+        {
+            cfg.AddProfile<ProjectProfile>();
+        });
+
         IMapper iMapper = config.CreateMapper();
         projectController = new ProjectController(mockProjectRepo.Object, iMapper);
     }
 
     [Fact]
-    public void Return404IfNoProjectIsFound()
+    public void GetReturns404StatusIfNoProjectIsFound()
     {
         mockProjectRepo
-            .Setup(r => r.GetProjects(It.IsAny<long?>(), It.IsAny<ProjectState>(), It.IsAny<DateTime>()))
+            .Setup(r => r.GetProjects(null, null, null))
             .Returns(Enumerable.Empty<Project>());
 
         var result = projectController.GetProjects(null, null, null);
@@ -37,7 +38,7 @@ public class ProjectControllerShould
     }
 
     [Fact]
-    public void Retrun200IfProjectIsFound()
+    public void GetRetruns200StatusIfProjectIsFound()
     {
         mockProjectRepo
             .Setup(r => r.GetProjects(null, null, null))
@@ -48,7 +49,7 @@ public class ProjectControllerShould
     }
 
     [Fact]
-    public void ReturnTheCorrectNumberOfProjects()
+    public void GetReturnsTheCorrectNumberOfProjects()
     {
         mockProjectRepo
             .Setup(r => r.GetProjects(null, null, null))
@@ -56,19 +57,73 @@ public class ProjectControllerShould
 
         var result = projectController.GetProjects(null, null, null);
 
-        Assert.Equal(mockProjectRepo.Object.GetProjects(null,null,null).Count(), 2);
+        Assert.Equal(mockProjectRepo.Object.GetProjects(null, null, null).Count(), 2);
     }
 
     [Fact]
-    public void CallGetProjectsFromRepo()
+    public void GetCallsGetProjectsFromRepo()
     {
         mockProjectRepo
             .Setup(r => r.GetProjects(null, null, null))
-            .Returns(new Project[] { new Project { ProjectId = 1 }});
+            .Returns(new Project[] { new Project { ProjectId = 1 } });
 
         var result = projectController.GetProjects(null, null, null);
 
-        mockProjectRepo.Verify(r=>r.GetProjects(It.IsAny<long?>(),It.IsAny<ProjectState?>(),It.IsAny<DateTime?>()));
+        mockProjectRepo.Verify(r => r.GetProjects(It.IsAny<long?>(), It.IsAny<ProjectState?>(), It.IsAny<DateTime?>()));
     }
 
+    [Fact]
+    public void CreateReturns201Status()
+    {
+        var result = projectController.CreateProject(new CreateProjectDto());
+        Assert.IsType<CreatedResult>(result);
+    }
+
+    [Fact]
+    public void CreateCallsCreateProjectFromRepo()
+    {
+        projectController.CreateProject(new CreateProjectDto());
+
+        mockProjectRepo.Verify(r => r.CreateProject(It.IsAny<Project>()));
+    }
+
+    [Theory]
+    [InlineData(5)]
+    [InlineData(7)]
+    public void CreateReturnsCorrectURL(int projectId)
+    {
+        var returnedObject = projectController.CreateProject(new CreateProjectDto()) as CreatedResult;
+
+        Assert.Equal(
+            $"/api/projects/{(returnedObject?.Value as ProjectDto)?.ProjectId}",
+            returnedObject?.Location
+            );
+    }
+    [Fact]
+    public void CreateReturnsCorrectObject()
+    {
+        var createProjectDto = new CreateProjectDto
+        {
+            Name = "name",
+            OwnerId = 17,
+            State = ProjectState.Active,
+            StartDate = new DateTime(2022, 1, 1)
+        };
+
+        var projectDto = new ProjectDto
+        {
+            ProjectName = "name",
+            OwnerId = 17,
+            State = ProjectState.Active,
+            StartDate = new DateTime(2022, 1, 1)
+        };
+
+        var controllerResult = projectController.CreateProject(createProjectDto) as CreatedResult;
+        var returnedObject = controllerResult?.Value as ProjectDto ?? throw new Exception();
+
+        Assert.Equal(returnedObject.ProjectName, projectDto.ProjectName);
+        Assert.Equal(returnedObject.OwnerId, projectDto.OwnerId);
+        Assert.Equal(returnedObject.State, projectDto.State);
+        Assert.Equal(returnedObject.StartDate, projectDto.StartDate);
+    }
 }
