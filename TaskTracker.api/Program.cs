@@ -16,10 +16,12 @@ builder.Services.AddSingleton<TaskTrackerDbContext,TaskTrackerDbContext>();
 
 builder.Services.AddSingleton<IProjectRepository, ProjectDbRepository>();
 builder.Services.AddSingleton<IUserRepository, UserDbRepository>();
+builder.Services.AddSingleton<ITaskRepository, TaskDbRepository>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddScoped<IValidator<CreateProjectDto>, CreateProjectDtoValidator>();
+builder.Services.AddScoped<IValidator<CreateTaskDto>, CreateTaskDtoValidator>();
 
 var app = builder.Build();
 

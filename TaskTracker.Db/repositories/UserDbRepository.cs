@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+
 namespace TaskTracker.Db;
 
 public class UserDbRepository : IUserRepository
@@ -13,5 +15,16 @@ public class UserDbRepository : IUserRepository
     public bool HasId(long id)
     {
         return dbContext.Users.Any(u => u.UserID == id);
+    }
+
+    public bool UserCanAccessProject(long userId, long projectId)
+    {
+        return dbContext
+            .Projects.Include(p => p.Users)
+            .Any(
+                p =>
+                    p.ProjectId == projectId &&
+                    (p.OwnerId == userId || p.Users!.Any(u => u.UserID == userId))
+                );
     }
 }

@@ -29,12 +29,12 @@ public class ProjectDbRepository : IProjectRepository
             projects = projects.Where(p => p.State == state);
 
         if (startDate is not null)
-            projects = projects.Where(p => p.StartDate.Date == startDate?.Date);
+            projects = projects.Where(p => p.StartDate.Equals(startDate));
 
-        return projects;
+        return projects.ToList();
     }
 
-    private IEnumerable<Project> GetProjects()
+    private IQueryable<Project> GetProjects()
     {
         return dbContext.Projects
             .Include(p => p.Users)

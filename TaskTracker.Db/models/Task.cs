@@ -8,6 +8,8 @@ public class Task
 
     public long UserId { get; set; }
 
+    public string TableName { get; set; } = "";
+
     public TaskState State { get; set; }
 
     public Project? Project { get; set; }

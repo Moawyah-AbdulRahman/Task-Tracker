@@ -7,7 +7,7 @@ public class TaskEntityTypeConfiguration : IEntityTypeConfiguration<Task>
 {
     public void Configure(EntityTypeBuilder<Task> builder)
     {
-        builder.HasKey(t => new { t.ProjectId, t.TaskId });
+        builder.HasKey(t => t.TaskId);
 
         builder
             .HasOne(t => t.Project)
