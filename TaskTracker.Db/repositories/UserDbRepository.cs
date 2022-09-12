@@ -27,4 +27,11 @@ public class UserDbRepository : IUserRepository
                     (p.OwnerId == userId || p.Users!.Any(u => u.UserID == userId))
                 );
     }
+
+    public IEnumerable<Task> GetTasks(long userId)
+    {
+        return dbContext
+            .Tasks
+            .Where(t => t.UserId == userId);
+    }
 }
