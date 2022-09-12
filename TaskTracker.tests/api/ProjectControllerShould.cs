@@ -87,18 +87,6 @@ public class ProjectControllerShould
         mockProjectRepo.Verify(r => r.CreateProject(It.IsAny<Project>()));
     }
 
-    [Theory]
-    [InlineData(5)]
-    [InlineData(7)]
-    public void CreateReturnsCorrectURL(int projectId)
-    {
-        var returnedObject = projectController.CreateProject(new CreateProjectDto()) as CreatedResult;
-
-        Assert.Equal(
-            $"/api/projects/{(returnedObject?.Value as ProjectDto)?.ProjectId}",
-            returnedObject?.Location
-            );
-    }
     [Fact]
     public void CreateReturnsCorrectObject()
     {
