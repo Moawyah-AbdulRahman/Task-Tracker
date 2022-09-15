@@ -12,11 +12,11 @@ builder.Services.AddFluentValidationAutoValidation();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddSingleton<TaskTrackerDbContext,TaskTrackerDbContext>();
+builder.Services.AddDbContext<TaskTrackerDbContext>();
 
-builder.Services.AddSingleton<IProjectRepository, ProjectDbRepository>();
-builder.Services.AddSingleton<IUserRepository, UserDbRepository>();
-builder.Services.AddSingleton<ITaskRepository, TaskDbRepository>();
+builder.Services.AddScoped<IProjectRepository, ProjectDbRepository>();
+builder.Services.AddScoped<IUserRepository, UserDbRepository>();
+builder.Services.AddScoped<ITaskRepository, TaskDbRepository>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
