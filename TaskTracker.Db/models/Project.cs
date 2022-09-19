@@ -17,4 +17,6 @@ public class Project
     public ICollection<User>? Users { get; set; }
 
     public ICollection<Task>? Tasks { get; set; }
+
+    public ICollection<Team>? Teams { get; set; }
 }

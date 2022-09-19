@@ -8,7 +8,7 @@ public class Task
 
     public long UserId { get; set; }
 
-    public string TableName { get; set; } = "";
+    public string Name { get; set; } = "";
 
     public TaskState State { get; set; }
 

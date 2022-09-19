@@ -4,13 +4,17 @@ using TaskTracker.Db.configurations;
 namespace TaskTracker.Db;
 public class TaskTrackerDbContext : DbContext
 {
+    #nullable disable
     public DbSet<Increment> Increments { get; set; }
 
     public DbSet<Project> Projects { get; set; }
 
     public DbSet<Task> Tasks { get; set; }
 
+    public DbSet<Team> Teams { get; set; }
+
     public DbSet<User> Users { get; set; }
+    #nullable enable
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -35,5 +39,7 @@ public class TaskTrackerDbContext : DbContext
         new TaskEntityTypeConfiguration().Configure(modelBuilder.Entity<Task>());
 
         new IncrementEntityTypeConfiguration().Configure(modelBuilder.Entity<Increment>());
+
+        new TeamEntityTypeConfiguration().Configure(modelBuilder.Entity<Team>());
     }
 }

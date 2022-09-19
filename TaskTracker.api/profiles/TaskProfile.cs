@@ -13,7 +13,7 @@ public class TaskProfile : Profile
                 opt => opt.MapFrom(src => src.Assignee)
                 )
             .ForMember(
-                dest => dest.TableName,
+                dest => dest.Name,
                 opt => opt.MapFrom(src => src.Name)
                 );
 
@@ -24,7 +24,7 @@ public class TaskProfile : Profile
             )
             .ForMember(
                 dest => dest.Name,
-                opt => opt.MapFrom(src => src.TableName)
+                opt => opt.MapFrom(src => src.Name)
             );
     }
 }
