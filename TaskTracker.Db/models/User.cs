@@ -16,7 +16,7 @@ public class User
 
     public ICollection<Task>? Tasks { get; set; }
     
-    public long TeamId { get; set; }
+    public long? TeamId { get; set; }
 
     public Team? Team { get; set; }
 }

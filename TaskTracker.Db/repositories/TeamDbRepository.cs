@@ -1,4 +1,4 @@
-namespace TaskTracker.Db.repositories;
+namespace TaskTracker.Db;
 
 public class TeamDbRepository : ITeamRepository
 {
@@ -8,5 +8,18 @@ public class TeamDbRepository : ITeamRepository
     {
         this.dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
     }
-    
+
+    public void Add(Team team)
+    {
+        var teamMembers = team.Members ?? Enumerable.Empty<User>();
+        team.Members = null;
+        foreach (var member in teamMembers)
+        {
+            member.Team = team;
+        }
+
+        dbContext.Teams.Add(team);
+        dbContext.UpdateRange(teamMembers);
+        dbContext.SaveChanges();
+    }
 }

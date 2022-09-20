@@ -6,4 +6,6 @@ public interface IProjectRepository
         DateTime? startDate);
     
     public void CreateProject(Project project);
+    
+    bool HasId(long pId);
 }

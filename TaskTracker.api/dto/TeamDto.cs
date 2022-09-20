@@ -1,6 +1,8 @@
-namespace TaskTracker.Db;
+using TaskTracker.Db;
 
-public class Team
+namespace TaskTracker.api;
+
+public class TeamDto
 {
     public long TeamId { get; set; }
 
@@ -12,7 +14,5 @@ public class Team
 
     public long ProjectId { get; set; }
 
-    public Project? Project { get; set; }
-
-    public ICollection<User>? Members { get; set; }
+    public ICollection<long> MemberIds { get; set; } = new List<long>();
 }

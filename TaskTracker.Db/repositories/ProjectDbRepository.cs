@@ -22,8 +22,8 @@ public class ProjectDbRepository : IProjectRepository
     {
         var projects = GetProjects();
 
-        if(userId is not null)
-            projects = projects.Where(p=>p.OwnerId == userId || p.Users!.Any(u =>u.UserID == userId));
+        if (userId is not null)
+            projects = projects.Where(p => p.OwnerId == userId || p.Users!.Any(u => u.UserID == userId));
 
         if (state is not null)
             projects = projects.Where(p => p.State == state);
@@ -32,6 +32,11 @@ public class ProjectDbRepository : IProjectRepository
             projects = projects.Where(p => p.StartDate.Equals(startDate));
 
         return projects.ToList();
+    }
+
+    public bool HasId(long pId)
+    {
+        return dbContext.Projects.Any(p => p.ProjectId == pId);
     }
 
     private IQueryable<Project> GetProjects()

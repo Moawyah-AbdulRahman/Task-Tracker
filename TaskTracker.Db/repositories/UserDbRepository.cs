@@ -21,11 +21,8 @@ public class UserDbRepository : IUserRepository
     {
         return dbContext
             .Projects.Include(p => p.Users)
-            .Any(
-                p =>
-                    p.ProjectId == projectId &&
-                    (p.OwnerId == userId || p.Users!.Any(u => u.UserID == userId))
-                );
+            .Where(p => p.ProjectId == projectId)
+            .Any(p => p.OwnerId == userId || p.Users!.Any(u => u.UserID == userId));
     }
 
     public IEnumerable<Task> GetTasks(long userId)
@@ -33,5 +30,13 @@ public class UserDbRepository : IUserRepository
         return dbContext
             .Tasks
             .Where(t => t.UserId == userId);
+    }
+
+    public IEnumerable<User> GetUsers(IEnumerable<long> userIds)
+    {
+        return dbContext
+            .Users
+            .Where(u => userIds.Contains(u.UserID))
+            .ToList();
     }
 }
