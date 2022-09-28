@@ -33,7 +33,7 @@ namespace TaskTracker.Db.Migrations
                 RETURN @Result;
             END;
             ");
-            
+
             migrationBuilder.AddCheckConstraint(
                 name: "CK_user_can_access_project",
                 table: "Tasks",

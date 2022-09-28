@@ -20,7 +20,7 @@ namespace TaskTracker.Db.Migrations
                 type: "bigint",
                 nullable: true
                 );
-            
+
             migrationBuilder.CreateTable(
                 name: "Teams",
                 columns: table => new

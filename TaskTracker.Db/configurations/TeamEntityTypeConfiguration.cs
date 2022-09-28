@@ -8,14 +8,11 @@ public class TeamEntityTypeConfiguration : IEntityTypeConfiguration<Team>
     public void Configure(EntityTypeBuilder<Team> builder)
     {
         builder
-            .HasKey(t=>t.TeamId);
+            .HasKey(t => t.TeamId);
 
         builder
-            .HasMany(t=>t.Members)
-            .WithOne(u=>u.Team);
-        
-        builder
-            .HasOne(t=>t.Project)
-            .WithMany(p=>p.Teams);
+            .HasOne(t => t.Project)
+            .WithMany(p => p.Teams)
+            .HasForeignKey(t => t.ProjectId);
     }
 }

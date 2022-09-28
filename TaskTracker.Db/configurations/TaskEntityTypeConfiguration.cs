@@ -10,18 +10,16 @@ public class TaskEntityTypeConfiguration : IEntityTypeConfiguration<Task>
         builder.HasKey(t => t.TaskId);
 
         builder
-            .HasOne(t => t.Project)
+            .HasOne(t => t.Sprint)
             .WithMany(p => p.Tasks)
-            .HasForeignKey(t => t.ProjectId);
+            .HasForeignKey(t => t.SprintName);
 
         builder
             .HasOne(t => t.User)
             .WithMany(u => u.Tasks)
             .HasForeignKey(t => t.UserId);
 
-        builder.HasCheckConstraint(
-            "CK_user_can_access_project",
-            "[dbo].[FnUserCanAccessProject](UserId, OwnerId, ProjectName) = 1"
-        );
+        builder
+            .HasOne(t => t.StoryPoints);
     }
 }

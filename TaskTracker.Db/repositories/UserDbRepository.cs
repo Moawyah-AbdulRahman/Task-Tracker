@@ -19,10 +19,15 @@ public class UserDbRepository : IUserRepository
 
     public bool UserCanAccessProject(long userId, long projectId)
     {
-        return dbContext
-            .Projects.Include(p => p.Users)
-            .Where(p => p.ProjectId == projectId)
-            .Any(p => p.OwnerId == userId || p.Users!.Any(u => u.UserID == userId));
+        return
+            dbContext
+            .Users.Include(u => u.Team)
+            .FirstOrDefault(
+                u => u.UserID == userId,
+                new User { Team = new Team { ProjectId = -1 } }
+            )
+            .Team!
+            .ProjectId == projectId;
     }
 
     public IEnumerable<Task> GetTasks(long userId)

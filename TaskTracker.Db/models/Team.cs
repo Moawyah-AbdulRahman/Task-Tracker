@@ -15,4 +15,6 @@ public class Team
     public Project? Project { get; set; }
 
     public ICollection<User>? Members { get; set; }
+
+    public ICollection<Sprint>? Sprints { get; set; }
 }
