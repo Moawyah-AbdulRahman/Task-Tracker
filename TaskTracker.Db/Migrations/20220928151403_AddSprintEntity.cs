@@ -17,10 +17,6 @@ namespace TaskTracker.Db.Migrations
                 name: "FK_Tasks_Projects_ProjectId",
                 table: "Tasks");
 
-            migrationBuilder.DropForeignKey(
-                name: "FK_Users_Teams_TeamId",
-                table: "Users");
-
             migrationBuilder.DropTable(
                 name: "ProjectUser");
 
@@ -44,32 +40,19 @@ namespace TaskTracker.Db.Migrations
                 name: "OwnerId",
                 table: "Projects");
 
-            migrationBuilder.RenameColumn(
-                name: "TeamName",
-                table: "Teams",
-                newName: "Name");
-
-            migrationBuilder.AlterColumn<long>(
-                name: "TeamId",
-                table: "Users",
-                type: "bigint",
-                nullable: true,
-                oldClrType: typeof(long),
-                oldType: "bigint");
-
             migrationBuilder.AddColumn<string>(
                 name: "SprintName",
                 table: "Tasks",
                 type: "nvarchar(450)",
-                nullable: false,
-                defaultValue: "");
+                nullable: true
+                );
 
             migrationBuilder.AddColumn<int>(
                 name: "StoryPointsValue",
                 table: "Tasks",
                 type: "int",
-                nullable: false,
-                defaultValue: 0);
+                nullable: false
+                );
 
             migrationBuilder.CreateTable(
                 name: "Sprints",
@@ -88,7 +71,7 @@ namespace TaskTracker.Db.Migrations
                         column: x => x.TeamId,
                         principalTable: "Teams",
                         principalColumn: "TeamId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -96,7 +79,6 @@ namespace TaskTracker.Db.Migrations
                 columns: table => new
                 {
                     Value = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1")
                 },
                 constraints: table =>
                 {
@@ -138,7 +120,7 @@ namespace TaskTracker.Db.Migrations
                 column: "SprintName",
                 principalTable: "Sprints",
                 principalColumn: "Name",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.NoAction);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Tasks_StoryPoints_StoryPointsValue",
@@ -146,14 +128,7 @@ namespace TaskTracker.Db.Migrations
                 column: "StoryPointsValue",
                 principalTable: "StoryPoints",
                 principalColumn: "Value",
-                onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Users_Teams_TeamId",
-                table: "Users",
-                column: "TeamId",
-                principalTable: "Teams",
-                principalColumn: "TeamId");
+                onDelete: ReferentialAction.NoAction);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -165,10 +140,6 @@ namespace TaskTracker.Db.Migrations
             migrationBuilder.DropForeignKey(
                 name: "FK_Tasks_StoryPoints_StoryPointsValue",
                 table: "Tasks");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Users_Teams_TeamId",
-                table: "Users");
 
             migrationBuilder.DropTable(
                 name: "Sprints");
@@ -191,21 +162,6 @@ namespace TaskTracker.Db.Migrations
             migrationBuilder.DropColumn(
                 name: "StoryPointsValue",
                 table: "Tasks");
-
-            migrationBuilder.RenameColumn(
-                name: "Name",
-                table: "Teams",
-                newName: "TeamName");
-
-            migrationBuilder.AlterColumn<long>(
-                name: "TeamId",
-                table: "Users",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L,
-                oldClrType: typeof(long),
-                oldType: "bigint",
-                oldNullable: true);
 
             migrationBuilder.AddColumn<long>(
                 name: "ProjectId",
@@ -279,14 +235,6 @@ namespace TaskTracker.Db.Migrations
                 column: "ProjectId",
                 principalTable: "Projects",
                 principalColumn: "ProjectId",
-                onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Users_Teams_TeamId",
-                table: "Users",
-                column: "TeamId",
-                principalTable: "Teams",
-                principalColumn: "TeamId",
                 onDelete: ReferentialAction.Cascade);
         }
     }

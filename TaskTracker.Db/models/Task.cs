@@ -4,7 +4,7 @@ public class Task
 {
     public long TaskId { get; set; }
 
-    public string SprintName { get; set; } = "";
+    public string? SprintName { get; set; }
 
     public long UserId { get; set; }
 
