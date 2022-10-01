@@ -31,7 +31,7 @@ public class ProjectDbRepository : IProjectRepository
             {
                 return Enumerable.Empty<Project>();
             }
-            projects = projects.Where(user.Team!.ProjectId == p.ProjectId);
+            projects = projects.Where(p => user.Team!.ProjectId == p.ProjectId);
         }
 
         if (state is not null)

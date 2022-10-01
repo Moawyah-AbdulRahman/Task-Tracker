@@ -13,10 +13,5 @@ internal class SprintEntityTypeConfiguration : IEntityTypeConfiguration<Sprint>
         builder
             .HasOne(s => s.Team)
             .WithMany(t => t.Sprints);
-
-        //builder
-        //    .HasCheckConstraint(
-        //        "sprint_task_belongs_to_sprint_team_member",
-        //        "");
     }
 }
