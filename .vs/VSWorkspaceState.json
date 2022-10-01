@@ -1,0 +1,12 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\TaskTracker.api",
+    "\\TaskTracker.api\\Controllers",
+    "\\TaskTracker.api\\validators",
+    "\\TaskTracker.Db",
+    "\\TaskTracker.Db\\repositories"
+  ],
+  "SelectedNode": "\\Task-Tracker.csproj",
+  "PreviewInSolutionExplorer": false
+}

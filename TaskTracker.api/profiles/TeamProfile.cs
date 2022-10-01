@@ -6,13 +6,8 @@ namespace TaskTracker.api;
 
 public class TeamProfile : Profile
 {
-    private readonly IUserRepository userRepository;
-
     public TeamProfile(IUserRepository userRepository)
     {
-        this.userRepository = userRepository
-            ?? throw new ArgumentNullException(nameof(userRepository));
-
         CreateMap<CreateTeamDto, Team>()
             .ForMember(
                 dest => dest.Members,

@@ -17,19 +17,6 @@ public class UserDbRepository : IUserRepository
         return dbContext.Users.Any(u => u.UserID == id);
     }
 
-    public bool UserCanAccessProject(long userId, long projectId)
-    {
-        return
-            dbContext
-            .Users.Include(u => u.Team)
-            .FirstOrDefault(
-                u => u.UserID == userId,
-                new User { Team = new Team { ProjectId = -1 } }
-            )
-            .Team!
-            .ProjectId == projectId;
-    }
-
     public IEnumerable<Task> GetTasks(long userId)
     {
         return dbContext
@@ -43,5 +30,13 @@ public class UserDbRepository : IUserRepository
             .Users
             .Where(u => userIds.Contains(u.UserID))
             .ToList();
+    }
+
+    public User? GetUser(long userId)
+    {
+        return dbContext
+            .Users
+            .Include(u => u.Team)
+            .First(u => u.UserID == userId);
     }
 }

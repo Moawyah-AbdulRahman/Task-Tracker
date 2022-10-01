@@ -5,22 +5,18 @@ namespace TaskTracker.api;
 
 public class ProjectProfile : Profile
 {
-    public ProjectProfile()
+    public ProjectProfile(ITeamRepository teamRepository)
     {
         CreateMap<Project, ProjectDto>()
             .ForMember(
-                dest => dest.Tasks,
-                opt=>opt.MapFrom(src=>src.Tasks!.Select(t=>t.TaskId))
-            )
-            .ForMember(
-                dest=>dest.Users,
-                opt=>opt.MapFrom(src=>src.Users!.Select(u=>u.UserID))
+                dest => dest.TeamIds,
+                opt => opt.MapFrom(src => src.Teams!.Select(t => t.TeamId))
             );
-        
+
         CreateMap<CreateProjectDto, Project>()
             .ForMember(
-                dest=>dest.ProjectName,
-                opt=>opt.MapFrom(src=>src.Name)
+                dest => dest.ProjectName,
+                opt => opt.MapFrom(src => src.Name)
             );
     }
 }

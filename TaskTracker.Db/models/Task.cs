@@ -12,7 +12,7 @@ public class Task
 
     public TaskState State { get; set; }
 
-    public StoryPoints StoryPoints { get; set; }
+    public int StoryPointsValue { get; set; }
 
     public Sprint? Sprint { get; set; }
 

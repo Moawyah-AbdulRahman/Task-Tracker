@@ -18,8 +18,5 @@ public class TaskEntityTypeConfiguration : IEntityTypeConfiguration<Task>
             .HasOne(t => t.User)
             .WithMany(u => u.Tasks)
             .HasForeignKey(t => t.UserId);
-
-        builder
-            .HasOne(t => t.StoryPoints);
     }
 }

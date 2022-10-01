@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using TaskTracker.Db;
 
@@ -8,11 +9,13 @@ namespace TaskTracker.api;
 public class UserController : ControllerBase
 {
     private readonly IUserRepository userRepository;
+    private readonly IMapper mapper;
 
-    public UserController(IUserRepository userRepository)
+    public UserController(IUserRepository userRepository, IMapper mapper)
     {
         this.userRepository = userRepository ??
             throw new ArgumentNullException(nameof(userRepository));
+        this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
     }
 
     [HttpGet("{id}/board")]
@@ -26,7 +29,7 @@ public class UserController : ControllerBase
         var tasks = userRepository.GetTasks(id);
         var result = tasks
             .GroupBy(t => t.State)
-            .ToDictionary(g => g.Key, g => g.ToList());
+            .ToDictionary(g => g.Key, g => mapper.Map<IEnumerable<TaskDto>>(g.ToList()));
 
         return Ok(result);
     }

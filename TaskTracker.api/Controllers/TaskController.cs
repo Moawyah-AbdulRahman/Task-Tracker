@@ -14,9 +14,9 @@ public class TaskController : ControllerBase
 
     public TaskController(IMapper mapper, ITaskRepository taskRepository)
     {
-        this.mapper = mapper 
+        this.mapper = mapper
             ?? throw new ArgumentNullException(nameof(mapper));
-        this.taskRepository = taskRepository 
+        this.taskRepository = taskRepository
             ?? throw new ArgumentNullException(nameof(taskRepository));
     }
 
@@ -26,6 +26,6 @@ public class TaskController : ControllerBase
         var task = mapper.Map<Task>(createTaskDto);
         taskRepository.CreateTask(task);
         var taskDto = mapper.Map<TaskDto>(task);
-        return Created($"/api/tasks/{task.TaskId}",taskDto);
+        return Created($"/api/tasks/{task.TaskId}", taskDto);
     }
 }

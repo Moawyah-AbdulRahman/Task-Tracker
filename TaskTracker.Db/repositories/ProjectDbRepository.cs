@@ -25,7 +25,14 @@ public class ProjectDbRepository : IProjectRepository
         var projects = GetProjects();
 
         if (userId is not null)
-            projects = projects.Where(p => userRepository.UserCanAccessProject(userId.Value, p.ProjectId));
+        {
+            var user = userRepository.GetUser(userId.Value);
+            if (user is null || user.Team is null)
+            {
+                return Enumerable.Empty<Project>();
+            }
+            projects = projects.Where(user.Team!.ProjectId == p.ProjectId);
+        }
 
         if (state is not null)
             projects = projects.Where(p => p.State == state);

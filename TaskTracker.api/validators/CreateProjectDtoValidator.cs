@@ -5,15 +5,13 @@ namespace TaskTracker.api;
 
 public class CreateProjectDtoValidator : AbstractValidator<CreateProjectDto>
 {
-    private readonly IUserRepository userRepository;
+    private readonly ITeamRepository teamRepository;
 
-    public CreateProjectDtoValidator(IUserRepository userRepository)
+    public CreateProjectDtoValidator(ITeamRepository teamRepository)
     {
-        this.userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
-        
+        this.teamRepository = teamRepository ?? throw new ArgumentNullException(nameof(teamRepository));
+
         RuleFor(p => p.Name)
             .Must(name => !string.IsNullOrWhiteSpace(name));
-        RuleFor(p => p.OwnerId)
-            .Must(id => userRepository.HasId(id));
     }
 }

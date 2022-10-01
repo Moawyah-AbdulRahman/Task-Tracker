@@ -14,4 +14,9 @@ public class TaskDbRepository : ITaskRepository
         dbContext.Add(task);
         dbContext.SaveChanges();
     }
+
+    public bool StoryPointsValueAvailable(int storyPointsValue)
+    {
+        return dbContext.StoryPoints.Contains(new StoryPoints { Value = storyPointsValue });
+    }
 }

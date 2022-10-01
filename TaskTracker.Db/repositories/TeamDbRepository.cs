@@ -22,4 +22,14 @@ public class TeamDbRepository : ITeamRepository
         dbContext.UpdateRange(teamMembers);
         dbContext.SaveChanges();
     }
+
+    //public IEnumerable<Team> GetTeams(IEnumerable<long> teamIds)
+    //{
+    //    return dbContext.Teams.Where(t => teamIds.Contains(t.TeamId));
+    //}
+
+    //public bool HasId(long teamId)
+    //{
+    //    return dbContext.Teams.Any(t => t.TeamId == teamId);
+    //}
 }

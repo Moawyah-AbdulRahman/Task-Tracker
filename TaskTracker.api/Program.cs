@@ -22,9 +22,11 @@ builder.Services.AddScoped<ITeamRepository, TeamDbRepository>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped(provider => new MapperConfiguration(cfg =>
-    {
-        cfg.AddProfile(new TeamProfile(provider.GetService<IUserRepository>()!));
-    }).CreateMapper());
+{
+    cfg.AddProfile(new TeamProfile(provider.GetService<IUserRepository>()!));
+    cfg.AddProfile(new ProjectProfile(provider.GetService<ITeamRepository>()!));
+    cfg.AddProfile(new TaskProfile());
+}).CreateMapper());
 
 
 builder.Services.AddScoped<IValidator<CreateProjectDto>, CreateProjectDtoValidator>();
