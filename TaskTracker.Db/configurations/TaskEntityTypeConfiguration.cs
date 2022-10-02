@@ -19,8 +19,8 @@ public class TaskEntityTypeConfiguration : IEntityTypeConfiguration<Task>
             .WithMany(u => u.Tasks)
             .HasForeignKey(t => t.UserId);
         builder
-    .HasCheckConstraint(
-        "ck_task_can_be_assigned_to_sprint",
-        "[dbo].[FnTaskBelongToSprint](TaskId, SprintName) = 1");
+            .HasCheckConstraint(
+                "ck_task_can_be_assigned_to_sprint",
+                "[dbo].[FnTaskBelongToSprint](TaskId, SprintName) = 1");
     }
 }

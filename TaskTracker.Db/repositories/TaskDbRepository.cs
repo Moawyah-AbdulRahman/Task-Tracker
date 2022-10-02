@@ -15,6 +15,18 @@ public class TaskDbRepository : ITaskRepository
         dbContext.SaveChanges();
     }
 
+    public IEnumerable<Task> GetTasks(IEnumerable<long> ids)
+    {
+        return dbContext
+            .Tasks
+            .Where(t => ids.Contains(t.TaskId));
+    }
+
+    public bool HasId(long id)
+    {
+        return dbContext.Tasks.Any(t => t.TaskId == id);
+    }
+
     public bool StoryPointsValueAvailable(int storyPointsValue)
     {
         return dbContext.StoryPoints.Contains(new StoryPoints { Value = storyPointsValue });

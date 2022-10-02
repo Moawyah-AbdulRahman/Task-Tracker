@@ -5,7 +5,7 @@ namespace TaskTracker.api;
 
 public class ProjectProfile : Profile
 {
-    public ProjectProfile(ITeamRepository teamRepository)
+    public ProjectProfile()
     {
         CreateMap<Project, ProjectDto>()
             .ForMember(

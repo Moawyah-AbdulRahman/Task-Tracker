@@ -4,11 +4,11 @@
 
 namespace TaskTracker.Db.Migrations
 {
-    public partial class AddConstraints : Migration
-    {
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.Sql(@"
+	public partial class AddConstraints : Migration
+	{
+		protected override void Up(MigrationBuilder migrationBuilder)
+		{
+			migrationBuilder.Sql(@"
 	            CREATE FUNCTION [dbo].[FnTaskCanBelongToSprint]
 				(
 					@taskId BIGINT,
@@ -39,19 +39,19 @@ namespace TaskTracker.Db.Migrations
 					RETURN @result
 				END");
 
-            migrationBuilder.AddCheckConstraint(
-                name: "ck_task_can_be_assigned_to_sprint",
-                table: "Tasks",
-                sql: "[dbo].[FnTaskCanBelongToSprint](TaskId, SprintName) = 1");
-        }
+			migrationBuilder.AddCheckConstraint(
+				name: "ck_task_can_be_assigned_to_sprint",
+				table: "Tasks",
+				sql: "[dbo].[FnTaskCanBelongToSprint](TaskId, SprintName) = 1");
+		}
 
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropCheckConstraint(
-                name: "ck_task_can_be_assigned_to_sprint",
-                table: "Tasks");
+		protected override void Down(MigrationBuilder migrationBuilder)
+		{
+			migrationBuilder.DropCheckConstraint(
+				name: "ck_task_can_be_assigned_to_sprint",
+				table: "Tasks");
 
 			migrationBuilder.Sql("DROP FUNCTION [dbo].[FnTaskCanBelongToSprint]");
-        }
-    }
+		}
+	}
 }
