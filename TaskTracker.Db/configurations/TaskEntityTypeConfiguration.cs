@@ -18,9 +18,15 @@ public class TaskEntityTypeConfiguration : IEntityTypeConfiguration<Task>
             .HasOne(t => t.User)
             .WithMany(u => u.Tasks)
             .HasForeignKey(t => t.UserId);
+
         builder
             .HasCheckConstraint(
                 "ck_task_can_be_assigned_to_sprint",
                 "[dbo].[FnTaskBelongToSprint](TaskId, SprintName) = 1");
+
+        builder
+            .HasCheckConstraint(
+                "ck_task_no_in_Progress_if_data_missing",
+                "SprintName IS NOT NULL AND UserId IS NOT NULL AND StoryPointsValue IS NOT NULL OR State = 0");
     }
 }

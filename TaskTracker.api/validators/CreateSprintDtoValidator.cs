@@ -11,7 +11,7 @@ public class CreateSprintDtoValidator : AbstractValidator<CreateSprintDto>
         RuleFor(s => s.SprintName)
             .Must(n => !string.IsNullOrEmpty(n))
             .Must(n => !sprintRepository.HasName(n));
-        
+
         RuleFor(s => s.TeamId)
             .Must(id => teamRepository.HasId(id));
 
@@ -21,7 +21,10 @@ public class CreateSprintDtoValidator : AbstractValidator<CreateSprintDto>
             (sprint, ids) =>
                 !sprint.ShouldStartSprint ||
                 taskRepository.GetTasks(ids ?? Enumerable.Empty<long>())
-                    .Aggregate(0, (sum, task) => sum + task.StoryPointsValue) >= 50
+                    .Aggregate(
+                        0, 
+                        (sum, task) => sum + task.StoryPointsValue.GetValueOrDefault(0)
+                    ) >= 50
                 );
     }
 }

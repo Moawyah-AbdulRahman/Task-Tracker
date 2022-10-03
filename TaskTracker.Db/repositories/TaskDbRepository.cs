@@ -31,4 +31,10 @@ public class TaskDbRepository : ITaskRepository
     {
         return dbContext.StoryPoints.Contains(new StoryPoints { Value = storyPointsValue });
     }
+
+    public void UpdateTask(Task task)
+    {
+        dbContext.Update(task);
+        dbContext.SaveChanges();
+    }
 }

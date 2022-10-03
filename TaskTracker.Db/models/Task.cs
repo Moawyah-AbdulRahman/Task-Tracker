@@ -6,13 +6,13 @@ public class Task
 
     public string? SprintName { get; set; }
 
-    public long UserId { get; set; }
+    public long? UserId { get; set; }
 
     public string Name { get; set; } = "";
 
     public TaskState State { get; set; }
 
-    public int StoryPointsValue { get; set; }
+    public int? StoryPointsValue { get; set; }
 
     public Sprint? Sprint { get; set; }
 

@@ -11,7 +11,7 @@ public class TaskProfile : Profile
             .ForMember(
                 dest => dest.UserId,
                 opt => opt.MapFrom(src => src.Assignee)
-                );
+            );
 
         CreateMap<Task, TaskDto>()
             .ForMember(

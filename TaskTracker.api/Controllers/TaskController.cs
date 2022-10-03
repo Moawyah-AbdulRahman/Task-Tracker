@@ -28,4 +28,17 @@ public class TaskController : ControllerBase
         var taskDto = mapper.Map<TaskDto>(task);
         return Created($"/api/tasks/{task.TaskId}", taskDto);
     }
+
+    [HttpPut("{taskId}")]
+    public IActionResult UpdateTask([FromRoute]long taskId, [FromBody] CreateTaskDto createTaskDto)
+    {
+        if (!taskRepository.HasId(taskId))
+        {
+            return NotFound();
+        }
+        var task = mapper.Map<Task>(createTaskDto);
+        task.TaskId = taskId;
+        taskRepository.UpdateTask(task);
+        return NoContent();
+    }
 }

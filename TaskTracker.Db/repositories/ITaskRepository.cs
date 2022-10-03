@@ -7,6 +7,8 @@ public interface ITaskRepository
 
     IEnumerable<Task> GetTasks(IEnumerable<long> ids);
 
+    void UpdateTask(Task task);
+
     bool HasId(long id);
 
     bool StoryPointsValueAvailable(int storyPointsValue);

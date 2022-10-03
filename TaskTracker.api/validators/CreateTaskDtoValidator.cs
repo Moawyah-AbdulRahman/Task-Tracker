@@ -12,12 +12,23 @@ public class CreateTaskDtoValidator : AbstractValidator<CreateTaskDto>
 
         RuleFor(t => t.Assignee)
             .Must(
-                userId => userRepository.HasId(userId)
+                userId => userId is null || userRepository.HasId(userId.Value)
             );
 
         RuleFor(t => t.StoryPointsValue)
             .Must(
-                value => taskRepository.StoryPointsValueAvailable(value)
+                storyPoints =>
+                    storyPoints is null ||
+                    taskRepository.StoryPointsValueAvailable(storyPoints.Value)
+            );
+
+        RuleFor(t => t.State)
+            .Must(
+                (task, state) =>
+                    (state == TaskState.ToDo) ||
+                    (task.SprintName is not null &&
+                        task.Assignee is not null &&
+                        task.StoryPointsValue is not null)
             );
     }
 }
