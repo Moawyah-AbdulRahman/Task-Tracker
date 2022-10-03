@@ -11,4 +11,6 @@ public class CreateTaskDto
     public TaskState State { get; set; }
 
     public int StoryPointsValue { get; set; }
+
+    public string? SprintName { get; set; }
 }
