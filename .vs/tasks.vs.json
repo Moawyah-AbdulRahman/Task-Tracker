@@ -1,0 +1,15 @@
+{
+  "version": "0.2.1",
+  "tasks": [
+    {
+      "taskLabel": "task-Program",
+      "appliesTo": "TaskTracker.api/Program.cs",
+      "type": "launch"
+    },
+    {
+      "taskLabel": "task-Task-Tracker",
+      "appliesTo": "/",
+      "type": "launch"
+    }
+  ]
+}

@@ -22,21 +22,6 @@ namespace TaskTracker.Db.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("ProjectUser", b =>
-                {
-                    b.Property<long>("AccessableProjectsProjectId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("UsersUserID")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("AccessableProjectsProjectId", "UsersUserID");
-
-                    b.HasIndex("UsersUserID");
-
-                    b.ToTable("ProjectUser");
-                });
-
             modelBuilder.Entity("TaskTracker.Db.Increment", b =>
                 {
                     b.Property<long>("IncrementId")
@@ -66,9 +51,6 @@ namespace TaskTracker.Db.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("ProjectId"), 1L, 1);
 
-                    b.Property<long>("OwnerId")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("ProjectName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -81,9 +63,71 @@ namespace TaskTracker.Db.Migrations
 
                     b.HasKey("ProjectId");
 
-                    b.HasIndex("OwnerId");
-
                     b.ToTable("Projects");
+                });
+
+            modelBuilder.Entity("TaskTracker.Db.Sprint", b =>
+                {
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("TeamId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Name");
+
+                    b.HasIndex("TeamId");
+
+                    b.ToTable("Sprints");
+                });
+
+            modelBuilder.Entity("TaskTracker.Db.StoryPoints", b =>
+                {
+                    b.Property<int>("Value")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Value"), 1L, 1);
+
+                    b.HasKey("Value");
+
+                    b.ToTable("StoryPoints");
+
+                    b.HasData(
+                        new
+                        {
+                            Value = 1
+                        },
+                        new
+                        {
+                            Value = 2
+                        },
+                        new
+                        {
+                            Value = 3
+                        },
+                        new
+                        {
+                            Value = 4
+                        },
+                        new
+                        {
+                            Value = 8
+                        },
+                        new
+                        {
+                            Value = 13
+                        },
+                        new
+                        {
+                            Value = 21
+                        });
                 });
 
             modelBuilder.Entity("TaskTracker.Db.Task", b =>
@@ -94,28 +138,62 @@ namespace TaskTracker.Db.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("TaskId"), 1L, 1);
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SprintName")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("State")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("StoryPointsValue")
+                        .HasColumnType("int");
+
+                    b.Property<long?>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("TaskId");
+
+                    b.HasIndex("SprintName");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Tasks");
+
+                    b.HasCheckConstraint("ck_task_can_be_assigned_to_sprint", "[dbo].[FnTaskBelongToSprint](TaskId, SprintName) = 1");
+
+                    b.HasCheckConstraint("ck_task_no_in_Progress_if_data_missing", "SprintName IS NOT NULL AND UserId IS NOT NULL AND StoryPointsValue IS NOT NULLOR State = 0");
+                });
+
+            modelBuilder.Entity("TaskTracker.Db.Team", b =>
+                {
+                    b.Property<long>("TeamId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("TeamId"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<long>("ProjectId")
                         .HasColumnType("bigint");
 
                     b.Property<int>("State")
                         .HasColumnType("int");
 
-                    b.Property<string>("TableName")
+                    b.Property<string>("TeamKeyPrefix")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("TaskId");
+                    b.HasKey("TeamId");
 
                     b.HasIndex("ProjectId");
 
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Tasks");
-
-                    b.HasCheckConstraint("CK_user_can_access_project", "[dbo].[FnUserCanAccessProject](UserId, OwnerId, ProjectName) = 1");
+                    b.ToTable("Teams");
                 });
 
             modelBuilder.Entity("TaskTracker.Db.User", b =>
@@ -130,6 +208,9 @@ namespace TaskTracker.Db.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<long?>("TeamId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -140,22 +221,9 @@ namespace TaskTracker.Db.Migrations
 
                     b.HasKey("UserID");
 
+                    b.HasIndex("TeamId");
+
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("ProjectUser", b =>
-                {
-                    b.HasOne("TaskTracker.Db.Project", null)
-                        .WithMany()
-                        .HasForeignKey("AccessableProjectsProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TaskTracker.Db.User", null)
-                        .WithMany()
-                        .HasForeignKey("UsersUserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("TaskTracker.Db.Increment", b =>
@@ -169,37 +237,58 @@ namespace TaskTracker.Db.Migrations
                     b.Navigation("Task");
                 });
 
-            modelBuilder.Entity("TaskTracker.Db.Project", b =>
+            modelBuilder.Entity("TaskTracker.Db.Sprint", b =>
                 {
-                    b.HasOne("TaskTracker.Db.User", "Owner")
-                        .WithMany("OwnedProjects")
-                        .HasForeignKey("OwnerId")
+                    b.HasOne("TaskTracker.Db.Team", "Team")
+                        .WithMany("Sprints")
+                        .HasForeignKey("TeamId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Owner");
+                    b.Navigation("Team");
                 });
 
             modelBuilder.Entity("TaskTracker.Db.Task", b =>
                 {
-                    b.HasOne("TaskTracker.Db.Project", "Project")
+                    b.HasOne("TaskTracker.Db.Sprint", "Sprint")
                         .WithMany("Tasks")
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SprintName");
 
                     b.HasOne("TaskTracker.Db.User", "User")
                         .WithMany("Tasks")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
-                    b.Navigation("Project");
+                    b.Navigation("Sprint");
 
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("TaskTracker.Db.Team", b =>
+                {
+                    b.HasOne("TaskTracker.Db.Project", "Project")
+                        .WithMany("Teams")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Project");
+                });
+
+            modelBuilder.Entity("TaskTracker.Db.User", b =>
+                {
+                    b.HasOne("TaskTracker.Db.Team", "Team")
+                        .WithMany("Members")
+                        .HasForeignKey("TeamId");
+
+                    b.Navigation("Team");
+                });
+
             modelBuilder.Entity("TaskTracker.Db.Project", b =>
+                {
+                    b.Navigation("Teams");
+                });
+
+            modelBuilder.Entity("TaskTracker.Db.Sprint", b =>
                 {
                     b.Navigation("Tasks");
                 });
@@ -209,10 +298,15 @@ namespace TaskTracker.Db.Migrations
                     b.Navigation("Increments");
                 });
 
+            modelBuilder.Entity("TaskTracker.Db.Team", b =>
+                {
+                    b.Navigation("Members");
+
+                    b.Navigation("Sprints");
+                });
+
             modelBuilder.Entity("TaskTracker.Db.User", b =>
                 {
-                    b.Navigation("OwnedProjects");
-
                     b.Navigation("Tasks");
                 });
 #pragma warning restore 612, 618

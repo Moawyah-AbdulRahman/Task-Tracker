@@ -5,10 +5,12 @@ namespace TaskTracker.Db;
 public class ProjectDbRepository : IProjectRepository
 {
     private readonly TaskTrackerDbContext dbContext;
+    private readonly IUserRepository userRepository;
 
-    public ProjectDbRepository(TaskTrackerDbContext dbContext)
+    public ProjectDbRepository(TaskTrackerDbContext dbContext, IUserRepository userRepository)
     {
         this.dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+        this.userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
     }
 
     public void CreateProject(Project project)
@@ -22,8 +24,15 @@ public class ProjectDbRepository : IProjectRepository
     {
         var projects = GetProjects();
 
-        if(userId is not null)
-            projects = projects.Where(p=>p.OwnerId == userId || p.Users!.Any(u =>u.UserID == userId));
+        if (userId is not null)
+        {
+            var user = userRepository.GetUser(userId.Value);
+            if (user is null || user.Team is null)
+            {
+                return Enumerable.Empty<Project>();
+            }
+            projects = projects.Where(p => user.Team!.ProjectId == p.ProjectId);
+        }
 
         if (state is not null)
             projects = projects.Where(p => p.State == state);
@@ -34,10 +43,14 @@ public class ProjectDbRepository : IProjectRepository
         return projects.ToList();
     }
 
+    public bool HasId(long pId)
+    {
+        return dbContext.Projects.Any(p => p.ProjectId == pId);
+    }
+
     private IQueryable<Project> GetProjects()
     {
         return dbContext.Projects
-            .Include(p => p.Users)
-            .Include(p => p.Tasks);
+            .Include(p => p.Teams);
     }
 }

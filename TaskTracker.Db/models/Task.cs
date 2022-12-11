@@ -4,15 +4,17 @@ public class Task
 {
     public long TaskId { get; set; }
 
-    public long ProjectId { get; set; }
+    public string? SprintName { get; set; }
 
-    public long UserId { get; set; }
+    public long? UserId { get; set; }
 
-    public string TableName { get; set; } = "";
+    public string Name { get; set; } = "";
 
     public TaskState State { get; set; }
 
-    public Project? Project { get; set; }
+    public int? StoryPointsValue { get; set; }
+
+    public Sprint? Sprint { get; set; }
 
     public User? User { get; set; }
 

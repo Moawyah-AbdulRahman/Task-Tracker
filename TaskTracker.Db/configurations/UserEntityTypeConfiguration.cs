@@ -8,7 +8,8 @@ public class UserEntityTypeConfiguration : IEntityTypeConfiguration<User>
     public void Configure(EntityTypeBuilder<User> builder)
     {
         builder
-            .HasMany(u => u.AccessableProjects)
-            .WithMany(p => p.Users);
+            .HasOne(u => u.Team)
+            .WithMany(t => t.Members)
+            .HasForeignKey(u => u.TeamId);
     }
 }

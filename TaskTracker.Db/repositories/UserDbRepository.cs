@@ -17,21 +17,26 @@ public class UserDbRepository : IUserRepository
         return dbContext.Users.Any(u => u.UserID == id);
     }
 
-    public bool UserCanAccessProject(long userId, long projectId)
-    {
-        return dbContext
-            .Projects.Include(p => p.Users)
-            .Any(
-                p =>
-                    p.ProjectId == projectId &&
-                    (p.OwnerId == userId || p.Users!.Any(u => u.UserID == userId))
-                );
-    }
-
     public IEnumerable<Task> GetTasks(long userId)
     {
         return dbContext
             .Tasks
             .Where(t => t.UserId == userId);
+    }
+
+    public IEnumerable<User> GetUsers(IEnumerable<long> userIds)
+    {
+        return dbContext
+            .Users
+            .Where(u => userIds.Contains(u.UserID))
+            .ToList();
+    }
+
+    public User? GetUser(long userId)
+    {
+        return dbContext
+            .Users
+            .Include(u => u.Team)
+            .First(u => u.UserID == userId);
     }
 }
